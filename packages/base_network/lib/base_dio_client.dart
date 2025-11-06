@@ -6,6 +6,8 @@ import 'package:base_network/models/api_error.dart';
 import 'package:base_network/models/base_options.dart';
 import 'package:base_network/sentry_service.dart';
 import "package:dio/dio.dart";
+import 'package:datadog_dio/datadog_dio.dart';
+import 'package:datadog_flutter_plugin/datadog_flutter_plugin.dart';
 import 'package:dio_brotli_transformer/dio_brotli_transformer.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:firebase_performance_dio/firebase_performance_dio.dart';
@@ -50,7 +52,7 @@ abstract class BaseDioClient with NetworkMixin, AuthMixin, MiscMixin {
         ),
       ]);
     }
-    _dio = Dio()
+    _dio = Dio()..addDatadogInterceptor(DatadogSdk.instance)
       ..httpClientAdapter = getHttp2Adapter
       ..interceptors.addAll(interceptorList)
       ..transformer = DioBrotliTransformer();
